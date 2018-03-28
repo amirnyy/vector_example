@@ -46,7 +46,7 @@ bool vector_t::operator ==(vector_t const & other) const
 	{
 		for (unsigned int i=0; i< size_; i++) 
 		{
-		if (elements_[i] !=other.elements_[i]) flag =false;
+			if (elements_[i] !=other.elements_[i]) flag =false;
 		}
 	}
 	return flag;
@@ -73,10 +73,56 @@ std::size_t vector_t::capacity() const
 
 void vector_t::push_back(int value)
 {
+	if ((capacity_ == size_ ) && (size_ !=0))
+	{ 
+		int *elements_copy= new int [capacity_*2];
+		capacity_= capacity_*2;
+		for (unsigned int i=0; i< size_; i++)
+			elements_copy[i] =elements_[i];
+		size_++;
+		elements_copy[size_-1] = value;
+		delete [] elements_;
+		elements_ = new int [capacity_];
+		for (unsigned int i=0; i< size_; i++)
+			elements_[i] =elements_copy[i];
+		delete [] elements_copy;
+		return;
+	}
+	if (size_ == 0) 
+	{
+		size_=1;
+		elements_ = new int [1];
+		capacity_=1;
+		elements_[0]=value;
+		return;
+	}
+	size_++;
+	elements_ [size_-1] = value;
 }
 
 void vector_t::pop_back()
 {
+	if (size_==0) return;
+	if (size_==1) 
+	{
+		size_=0; 
+		capacity_=1; 
+		return;
+	}
+	size_--;
+	if (capacity_==(4*size_)) 
+	{
+		int *elements_copy= new int [capacity_/2];
+		capacity_= capacity_/2;
+		for (unsigned int i=0; i< size_; i++)
+			elements_copy[i] =elements_[i];
+		delete [] elements_;
+		elements_= new int [capacity_];
+		for (unsigned int i=0; i< size_; i++)
+			elements_[i] =elements_copy[i];
+		delete [] elements_copy;
+		return; 
+	}
 }
 
 int & vector_t::operator [](std::size_t index)
@@ -93,9 +139,11 @@ bool operator !=(vector_t const & lhs, vector_t const & rhs)
 {
 	bool flag=false;
 	if (lhs.size() != rhs.size()) flag=true;
-	else {
-		for (unsigned int i=0; i< lhs.size(); i++) {
-		if (lhs[i] !=rhs[i]) flag =true;
+	else 
+	{
+		for (unsigned int i=0; i< lhs.size(); i++) 
+		{
+			if (lhs[i] !=rhs[i]) flag =true;
 		}
 	}
 	return flag;
