@@ -81,15 +81,22 @@ void vector_t::pop_back()
 
 int & vector_t::operator [](std::size_t index)
 {
-	return elements_[0];
+	return elements_[index];
 }
 
 int vector_t::operator [](std::size_t index) const
 {
-	return 0;
+	return elements_[index];
 }
 
 bool operator !=(vector_t const & lhs, vector_t const & rhs)
 {
-	return true;
+	bool flag=false;
+	if (lhs.size() != rhs.size()) flag=true;
+	else {
+		for (unsigned int i=0; i< lhs.size(); i++) {
+		if (lhs[i] !=rhs[i]) flag =true;
+		}
+	}
+	return flag;
 }
