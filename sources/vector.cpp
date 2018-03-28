@@ -5,10 +5,16 @@
 
 vector_t::vector_t()
 {
+	elements_=nullptr;
+	size_=0;
+	capacity_=0;
 }
 
 vector_t::vector_t(vector_t const & other)
 {
+	elements_=other.elements_;
+	size_=other.size_;
+	capacity_=other.capacity_
 }
 
 vector_t & vector_t::operator =(vector_t const & other)
